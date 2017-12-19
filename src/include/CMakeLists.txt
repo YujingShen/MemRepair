@@ -4,7 +4,7 @@ SET(LIB_FILES Graph.cpp MemRepair.cpp)
 
 ADD_LIBRARY(MemRepair SHARED ${LIB_FILES})
 
-SET(TEST_SRCS TestIO.cpp)
+SET(TEST_SRCS TestIO.cpp TestFlowInsert.cpp)
 
 foreach(testSrc ${TEST_SRCS})
     get_filename_component(testName ${testSrc} NAME_WE)

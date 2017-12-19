@@ -67,4 +67,16 @@ namespace sjtu {
 
 		return *this;
 	}
+
+	MemRepair& MemRepairBaseline::repair() {
+		return *this;
+	}
+
+	MemRepair& MemRepairBaseline::increment_mcnts(const vector<pair<int, int>>& mcnts) {
+		return *this;
+	}
+
+	MemRepair& MemRepairBaseline::report_allocation() {
+		return *this;
+	}
 }

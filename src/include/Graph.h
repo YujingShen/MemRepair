@@ -63,7 +63,7 @@ namespace sjtu {
 		FlowGraph();
 		virtual ~FlowGraph() = default;
 		
-	private:
+	public:
 		Vertex st, ed;
 	};
 }
