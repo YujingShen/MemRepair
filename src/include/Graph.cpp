@@ -71,11 +71,11 @@ namespace sjtu {
 				u = prev[u->id]->u;
 			}
 
-			auto u = ed;
+			u = ed;
 			while (prev[u->id] != NULL) {
 				auto e = prev[u->id];
 				e->c -= min_cap;
-				edges[e->id ^ 1] += min_cap;
+				edges[e->id ^ 1]->c += min_cap;
 				u = e->u;
 			}
 
