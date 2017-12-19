@@ -57,7 +57,8 @@ namespace sjtu {
 
 	public:
 		pair<int, float> max_flow_min_cost();
-
+		
+		Graph& insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
 	public:
 		FlowGraph();
 		virtual ~FlowGraph() = default;

@@ -53,6 +53,12 @@ namespace sjtu {
 		ed = new_vertex();
 	}
 
+	Graph& FlowGraph::insert(Vertex u, Vertex v, int c, float w) {
+		Graph::insert(u, v, c, w);
+		Graph::insert(v, u, 0, -w);
+		return *this;
+	}
+
 	pair<int, float> FlowGraph::max_flow_min_cost() {
 		int vf = 0;
 		float cost = 0.0f;
@@ -80,7 +86,7 @@ namespace sjtu {
 			}
 
 			vf += min_cap;
-			cost += inc_cost * vf;
+			cost += inc_cost * min_cap;
 		}
 		
 		return std::make_pair(vf, cost);
