@@ -53,7 +53,7 @@ namespace sjtu {
 	class FlowGraph: public Graph
 	{
 		const float INF;
-		bool spfa(vector<Edge>& flow, float& inc_cost);
+		bool spfa(float &inc_cost, vector<Edge>& prev, vector<bool>& in_que, vector<float>& dist);
 
 	public:
 		pair<int, float> max_flow_min_cost();

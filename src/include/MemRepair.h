@@ -29,6 +29,8 @@ namespace sjtu {
 
 		virtual MemRepair& increment_mcnts(const vector<pair<int, int>>& mcnts);
 
+		virtual MemRepair& build_flow_graph();
+
 		virtual MemRepair& repair();
 
 		virtual MemRepair& report_allocation();
@@ -51,6 +53,14 @@ namespace sjtu {
 	{
 		//using std::map;
 		//using std::pair;
+	public:
+		virtual MemRepair& increment_mcnts(const vector<pair<int, int>>& mcnts);
+
+		virtual MemRepair& build_flow_graph();
+
+		virtual MemRepair& repair();
+
+		virtual MemRepair& report_allocation();
 	
 
 	public:

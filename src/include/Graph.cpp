@@ -57,32 +57,41 @@ namespace sjtu {
 		int vf = 0;
 		float cost = 0.0f;
 
-		vector<Edge> flow;
+		vector<Edge> prev(vertices.size(), NULL);
+		vector<bool> in_que(vertices.size(), false);
+		vector<float> dist(vertices.size(), 0.0f);
 		float inc_cost;
-		while (spfa(flow, inc_cost)) {
+
+		while (spfa(inc_cost, prev, in_que, dist)) {
 			int min_cap = 0x7ffffff;
-			for (auto && e : flow) {
-				min_cap = std::min(min_cap, e->c);
+			
+			auto u = ed;
+			while (prev[u->id] != NULL) {
+				min_cap = std::min(min_cap, prev[u->id]->c);
+				u = prev[u->id]->u;
 			}
 
-			for (auto && e : flow) {
+			auto u = ed;
+			while (prev[u->id] != NULL) {
+				auto e = prev[u->id];
 				e->c -= min_cap;
 				edges[e->id ^ 1] += min_cap;
+				u = e->u;
 			}
 
 			vf += min_cap;
-			cost += inc_cost;
-			flow.clear();
+			cost += inc_cost * vf;
 		}
 		
 		return std::make_pair(vf, cost);
 	}
 
-	bool FlowGraph::spfa(vector<Edge>& flow, float &inc_cost) {
+	bool FlowGraph::spfa(float& inc_cost, vector<Edge>& prev, vector<bool>& in_que, vector<float>& dist) {
+		for (size_t i = 0; i < vertices.size(); ++i) {
+			prev[i] = NULL, in_que[i] = false, dist[i] = INF;
+		}
+		
 		queue<Vertex> que;
-		vector<bool> in_que(vertices.size(), false);
-		vector<float> dist(vertices.size(), INF);
-		vector<Edge> prev(vertices.size(), NULL);
 
 		in_que[st->id] = true;
 		dist[st->id] = 0.0f;
@@ -110,11 +119,6 @@ namespace sjtu {
 		}
 
 		inc_cost = dist[ed->id];
-		auto u = ed;
-		while (prev[u->id] != NULL) {
-			flow.push_back(prev[u->id]);
-			u = prev[u->id]->u;
-		}  // extract flow
 		return true;
 	}
 }

@@ -14,7 +14,7 @@ namespace sjtu {
 		assert(w_segs < w && h_segs < h);
 
 		setting_file.close();
-		return *this;
+		return build_flow_graph();
 	}
 
 	MemRepair& MemRepair::read_mcnts(const string& mcnt_file_path) {
@@ -28,6 +28,11 @@ namespace sjtu {
 		}
 		mcnt_file.close();
 		return increment_mcnts(mcnts);
+	}
+
+	MemRepair& MemRepair::build_flow_graph() {
+		non_imp_warning();
+		return *this;
 	}
 
 	MemRepair& MemRepair::increment_mcnts(const vector<pair<int, int>>& mcnts) {
@@ -47,5 +52,19 @@ namespace sjtu {
 
 	void MemRepair::non_imp_warning() {
 		cout << "WARNING: not implemented yet" << endl;
+	}
+
+	
+	MemRepair& MemRepairBaseline::build_flow_graph() {
+		int rs = h / h_segs;
+		int cs = w / w_segs;
+
+		for (int r = 0; r < h; r += rs) {
+			for (int c = 0; c < w; c += cs) {
+
+			}
+		}
+
+		return *this;
 	}
 }
