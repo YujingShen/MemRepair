@@ -4,10 +4,10 @@ ADD_SUBDIRECTORY(include)
 
 INCLUDE_DIRECTORIES(include)
 
-set(SOURCE_FILES MemRepairBaselineDemo.cpp)
+ADD_EXECUTABLE(MemRepairBaselineDemo MemRepairBaselineDemo.cpp)
 
-ADD_EXECUTABLE(RepairExe ${SOURCE_FILES})
+TARGET_LINK_LIBRARIES(MemRepairBaselineDemo MemRepair)
 
-TARGET_LINK_LIBRARIES(RepairExe MemRepairLib)
+
 
 

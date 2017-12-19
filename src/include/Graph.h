@@ -32,11 +32,9 @@ namespace sjtu {
 			Edge next;
 		};
 
-	public:
 		Graph() = default;
 		virtual ~Graph();
 
-	public:
 		// creat new vertex
 		Vertex new_vertex(Edge first = NULL);
 
@@ -46,7 +44,6 @@ namespace sjtu {
 		// insert an edge with capacity c weight w
 		Graph& insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
 
-	public:
 		vector<Vertex> vertices;
 		vector<Edge> edges;
 	};
