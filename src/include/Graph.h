@@ -2,14 +2,15 @@
 
 #include <vector>
 #include <utility>
+#include <cstddef>  // NULL
 
 namespace sjtu {
+	using std::pair;
+	using std::vector;
 
 
 	class Graph
 	{
-		using std::vector;
-
 	public:
 		struct _Vertex;
 		struct _Edge;
@@ -32,30 +33,37 @@ namespace sjtu {
 		};
 
 	public:
-		Graph();
+		Graph() = default;
 		virtual ~Graph();
 
 	public:
 		// creat new vertex
-		Vertex new_vertex();
+		Vertex new_vertex(Edge first = NULL);
 
 		// add new edge
-		Edge new_edge(Vertex u, Vertex v, int c, float w);
+		Edge new_edge(Vertex u = NULL, Vertex v = NULL, int c = 0, float w = 0.0f);
 		
 		// insert an edge with capacity c weight w
-		Graph& insert(Vertex u, Vertex v, int c, float w);
+		Graph& insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
 
 	public:
 		vector<Vertex> vertices;
 		vector<Edge> edges;
 	};
 
-	class GraphAlgorithm {
-		using std::pair;
+	class FlowGraph: public Graph
+	{
+
 
 	public:
-		static pair max_flow_min_cost(const Graph* graph, Graph::Vertex u, Graph::Vertex v);
-		static pair vertex_cover_on_bipartite(const Graph* graph, Graph::Vertex u, Graph::Vertex v);
+		pair<int, float> max_flow_min_cost();
+
+	public:
+		FlowGraph();
+		virtual ~FlowGraph() = default;
+		
+	private:
+		Vertex st, ed;
 	};
 }
 

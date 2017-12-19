@@ -9,3 +9,5 @@
 /.vs/ProjectSettings.json
 *.json
 /.vs/MemRepair/v15/ipch/AutoPCH
+/.vs
+/build
