@@ -23,17 +23,17 @@ namespace sjtu {
 	class MemRepair
 	{
 	public:
-		virtual MemRepair& read_setting(const string& setting_file_path);
+		virtual void read_setting(const string& setting_file_path);
 
-		virtual MemRepair& read_mcnts(const string& mcnt_file_path);
+		virtual void read_mcnts(const string& mcnt_file_path);
 
-		virtual MemRepair& increment_mcnts(const vector<pair<int, int>>& mcnts);
+		virtual void increment_mcnts(const vector<pair<int, int>>& mcnts);
 
-		virtual MemRepair& build_flow_graph();
+		virtual void build_flow_graph();
 
-		virtual MemRepair& repair();
+		virtual void repair();
 
-		virtual MemRepair& report_allocation();
+		virtual void report_allocation();
 
 	private:
 		void non_imp_warning();
@@ -54,13 +54,13 @@ namespace sjtu {
 		//using std::map;
 		//using std::pair;
 	public:
-		virtual MemRepair& increment_mcnts(const vector<pair<int, int>>& mcnts);
+		virtual void increment_mcnts(const vector<pair<int, int>>& mcnts);
 
-		virtual MemRepair& build_flow_graph();
+		virtual void build_flow_graph();
 
-		virtual MemRepair& repair();
+		virtual void repair();
 
-		virtual MemRepair& report_allocation();
+		virtual void report_allocation();
 	
 
 	public:

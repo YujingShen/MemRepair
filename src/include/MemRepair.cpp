@@ -2,7 +2,7 @@
 
 namespace sjtu {
 
-	MemRepair& MemRepair::read_setting(const string& setting_file_path) {
+	void MemRepair::read_setting(const string& setting_file_path) {
 		fstream setting_file(setting_file_path, std::ios::in);
 
 		assert(setting_file);
@@ -14,10 +14,10 @@ namespace sjtu {
 		assert(w_segs < w && h_segs < h);
 
 		setting_file.close();
-		return build_flow_graph();
+		build_flow_graph();
 	}
 
-	MemRepair& MemRepair::read_mcnts(const string& mcnt_file_path) {
+	void MemRepair::read_mcnts(const string& mcnt_file_path) {
 		fstream mcnt_file(mcnt_file_path, std::ios::in);
 
 		assert(mcnt_file);
@@ -27,27 +27,23 @@ namespace sjtu {
 			mcnts.push_back(std::make_pair(r, c));
 		}
 		mcnt_file.close();
-		return increment_mcnts(mcnts);
+		increment_mcnts(mcnts);
 	}
 
-	MemRepair& MemRepair::build_flow_graph() {
+	void MemRepair::build_flow_graph() {
 		non_imp_warning();
-		return *this;
 	}
 
-	MemRepair& MemRepair::increment_mcnts(const vector<pair<int, int>>& mcnts) {
+	void MemRepair::increment_mcnts(const vector<pair<int, int>>& mcnts) {
 		non_imp_warning();
-		return *this;
 	}
 
-	MemRepair& MemRepair::repair() {
+	void MemRepair::repair() {
 		non_imp_warning();
-		return *this;
 	}
 
-	MemRepair& MemRepair::report_allocation() {
+	void MemRepair::report_allocation() {
 		non_imp_warning();
-		return *this;
 	}
 
 	void MemRepair::non_imp_warning() {
@@ -55,7 +51,7 @@ namespace sjtu {
 	}
 
 	
-	MemRepair& MemRepairBaseline::build_flow_graph() {
+	void MemRepairBaseline::build_flow_graph() {
 		int rs = h / h_segs;
 		int cs = w / w_segs;
 
@@ -65,18 +61,18 @@ namespace sjtu {
 			}
 		}
 
-		return *this;
+
 	}
 
-	MemRepair& MemRepairBaseline::repair() {
-		return *this;
+	void MemRepairBaseline::repair() {
+
 	}
 
-	MemRepair& MemRepairBaseline::increment_mcnts(const vector<pair<int, int>>& mcnts) {
-		return *this;
+	void MemRepairBaseline::increment_mcnts(const vector<pair<int, int>>& mcnts) {
+
 	}
 
-	MemRepair& MemRepairBaseline::report_allocation() {
-		return *this;
+	void MemRepairBaseline::report_allocation() {
+	
 	}
 }

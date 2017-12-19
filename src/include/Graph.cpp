@@ -1,5 +1,6 @@
 #include "Graph.h"
 
+
 namespace sjtu {
 
 	typedef Graph::Edge Edge;
@@ -29,13 +30,11 @@ namespace sjtu {
 		return ver;
 	}
 
-	Graph& Graph::insert(Vertex u, Vertex v, int c, float w) {
+	void Graph::insert(Vertex u, Vertex v, int c, float w) {
 		auto e = new_edge(u, v, c, w);
 		
 		e->next = u->first;
-		u->first = e;
-		
-		return *this;
+		u->first = e;		
 	}
 
 	Graph::~Graph() {
@@ -53,10 +52,9 @@ namespace sjtu {
 		ed = new_vertex();
 	}
 
-	Graph& FlowGraph::insert(Vertex u, Vertex v, int c, float w) {
+	void FlowGraph::insert(Vertex u, Vertex v, int c, float w) {
 		Graph::insert(u, v, c, w);
 		Graph::insert(v, u, 0, -w);
-		return *this;
 	}
 
 	pair<int, float> FlowGraph::max_flow_min_cost() {
@@ -70,7 +68,7 @@ namespace sjtu {
 
 		while (spfa(inc_cost, prev, in_que, dist)) {
 			int min_cap = 0x7ffffff;
-			
+
 			auto u = ed;
 			while (prev[u->id] != NULL) {
 				min_cap = std::min(min_cap, prev[u->id]->c);
@@ -92,7 +90,9 @@ namespace sjtu {
 		return std::make_pair(vf, cost);
 	}
 
-	bool FlowGraph::spfa(float& inc_cost, vector<Edge>& prev, vector<bool>& in_que, vector<float>& dist) {
+	bool FlowGraph::spfa(float& inc_cost, 
+		vector<Edge>& prev, vector<bool>& in_que, vector<float>& dist) {
+		
 		for (size_t i = 0; i < vertices.size(); ++i) {
 			prev[i] = NULL, in_que[i] = false, dist[i] = INF;
 		}
@@ -102,11 +102,12 @@ namespace sjtu {
 		in_que[st->id] = true;
 		dist[st->id] = 0.0f;
 		que.push(st);
-
+		
 		while (!que.empty()) {
 			auto u = que.front();
 			que.pop();
 			in_que[u->id] = false;
+
 			for (auto e = u->first; e != NULL; e = e->next) {
 				if (e->c > 0 && dist[u->id] + e->w < dist[e->v->id]) {
 					dist[e->v->id] = dist[u->id] + e->w;
@@ -119,7 +120,7 @@ namespace sjtu {
 				}
 			}  // for edges
 		}  // spfa
-
+		
 		if (prev[ed->id] == NULL || dist[ed->id] == INF) {
 			return false;
 		}
