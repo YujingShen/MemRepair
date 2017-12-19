@@ -4,11 +4,12 @@
 #include <utility>
 
 namespace sjtu {
-	using std::vector;
-	using std::pair;
+
 
 	class Graph
 	{
+		using std::vector;
+
 	public:
 		struct _Vertex;
 		struct _Edge;
@@ -23,6 +24,7 @@ namespace sjtu {
 
 		struct _Edge
 		{
+			int id;
 			Vertex u, v;
 			int c;
 			float w;
@@ -36,37 +38,24 @@ namespace sjtu {
 	public:
 		// creat new vertex
 		Vertex new_vertex();
-		
-		// insert an edge with capacity c weight w
-		void insert(Vertex u, Vertex v, int c, float w);
 
-		// visit vertex by index
-		Vertex operator[](int i);
-
-	private:
 		// add new edge
 		Edge new_edge(Vertex u, Vertex v, int c, float w);
-
-	private:
-		vector<Vertex> vertex_stack;
-		vector<Edge> edge_stack;
-	};
-
-	class FlowGraph
-	{
-	public:
-		Graph graph;
-		Graph::Vertex st, ed;
+		
+		// insert an edge with capacity c weight w
+		Graph& insert(Vertex u, Vertex v, int c, float w);
 
 	public:
-		FlowGraph();
-		virtual ~FlowGraph() = default;
+		vector<Vertex> vertices;
+		vector<Edge> edges;
 	};
 
 	class GraphAlgorithm {
+		using std::pair;
+
 	public:
-		pair max_flow_min_cost(const Graph* graph, Graph::Vertex u, Graph::Vertex v);
-		pair vertex_cover_on_bipartite(const Graph* graph, Graph::Vertex u, Graph::Vertex v);
+		static pair max_flow_min_cost(const Graph* graph, Graph::Vertex u, Graph::Vertex v);
+		static pair vertex_cover_on_bipartite(const Graph* graph, Graph::Vertex u, Graph::Vertex v);
 	};
 }
 
