@@ -48,12 +48,73 @@ namespace sjtu {
 		}
 	}
 
-	FlowGraph::FlowGraph() {
+	FlowGraph::FlowGraph(): INF(10000000.0f) {
 		st = new_vertex();
 		ed = new_vertex();
 	}
 
 	pair<int, float> FlowGraph::max_flow_min_cost() {
-		return std::make_pair(0, 0.0);
+		int vf = 0;
+		float cost = 0.0f;
+
+		vector<Edge> flow;
+		float inc_cost;
+		while (spfa(flow, inc_cost)) {
+			int min_cap = 0x7ffffff;
+			for (auto && e : flow) {
+				min_cap = std::min(min_cap, e->c);
+			}
+
+			for (auto && e : flow) {
+				e->c -= min_cap;
+				edges[e->id ^ 1] += min_cap;
+			}
+
+			vf += min_cap;
+			cost += inc_cost;
+			flow.clear();
+		}
+		
+		return std::make_pair(vf, cost);
+	}
+
+	bool FlowGraph::spfa(vector<Edge>& flow, float &inc_cost) {
+		queue<Vertex> que;
+		vector<bool> in_que(vertices.size(), false);
+		vector<float> dist(vertices.size(), INF);
+		vector<Edge> prev(vertices.size(), NULL);
+
+		in_que[st->id] = true;
+		dist[st->id] = 0.0f;
+		que.push(st);
+
+		while (!que.empty()) {
+			auto u = que.front();
+			que.pop();
+			in_que[u->id] = false;
+			for (auto e = u->first; e != NULL; e = e->next) {
+				if (e->c > 0 && dist[u->id] + e->w < dist[e->v->id]) {
+					dist[e->v->id] = dist[u->id] + e->w;
+					prev[e->v->id] = e;
+					
+					if (!in_que[e->v->id]) {
+						in_que[e->v->id] = true;
+						que.push(e->v);
+					}  // enque
+				}
+			}  // for edges
+		}  // spfa
+
+		if (prev[ed->id] == NULL || dist[ed->id] == INF) {
+			return false;
+		}
+
+		inc_cost = dist[ed->id];
+		auto u = ed;
+		while (prev[u->id] != NULL) {
+			flow.push_back(prev[u->id]);
+			u = prev[u->id]->u;
+		}  // extract flow
+		return true;
 	}
 }

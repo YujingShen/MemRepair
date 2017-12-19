@@ -3,8 +3,10 @@
 #include <vector>
 #include <utility>
 #include <cstddef>  // NULL
+#include <queue>
 
 namespace sjtu {
+	using std::queue;
 	using std::pair;
 	using std::vector;
 
@@ -50,7 +52,8 @@ namespace sjtu {
 
 	class FlowGraph: public Graph
 	{
-
+		const float INF;
+		bool spfa(vector<Edge>& flow, float& inc_cost);
 
 	public:
 		pair<int, float> max_flow_min_cost();
