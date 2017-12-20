@@ -7,11 +7,11 @@ namespace sjtu {
 
 		assert(setting_file);
 		setting_file
-			>> w >> h
-			>> w_segs >> h_segs
-			>> w_nums >> h_nums
+			>> cols >> rows
+			>> col_segs >> r_segs
+			>> c_nums >> r_nums
 			>> share_cost;
-		assert(w_segs < w && h_segs < h);
+		assert(col_segs < cols && r_segs < rows);
 
 		setting_file.close();
 		build_flow_graph();
@@ -50,25 +50,119 @@ namespace sjtu {
 		cout << "WARNING: not implemented yet" << endl;
 	}
 
-	
-	void MemRepairBaseline::build_flow_graph() {
-		int rs = h / h_segs;
-		int cs = w / w_segs;
-
-		for (int r = 0; r < h; r += rs) {
-			for (int c = 0; c < w; c += cs) {
-
-			}
-		}
 
 
+	MemRepairBaseline::MemRepairBaseline() {
+		mem_network = new FlowGraph();
 	}
 
-	void MemRepairBaseline::repair() {
+	MemRepairBaseline::~MemRepairBaseline() {
+		delete mem_network;
+		
+		for (auto&& b : bi_block) {
+			delete b;
+		}
+		bi_block.clear();
+	}
 
+	
+	void MemRepairBaseline::build_flow_graph() {
+		
+		rs = rows / r_segs + (rows % r_segs == 0 ? 0 : 1);
+		cs = cols / col_segs + (cols % col_segs == 0 ? 0 : 1);
+		INF_CAP = rs * cs;
+
+		auto st = mem_network->st;
+		auto ed = mem_network->ed;
+
+		int r, c;
+		for (r = 0; r < rows; r += rs) {
+			auto v = mem_network->new_vertex();
+			if (!spare_r.empty()) {
+				auto u = spare_r.back();
+				mem_network->insert(u, v, r_nums, share_cost);
+				mem_network->insert(v, u, r_nums, share_cost);
+			}  // sharing structure
+			
+			spare_r.push_back(v);
+			mem_network->insert(st, v, r + rs <= rows ? rs : rows - r);
+		}
+
+		for (c = 0; c < cols; c += cs) {
+			auto v = mem_network->new_vertex();
+			if (!spare_c.empty()) {
+				auto u = spare_r.back();
+				mem_network->insert(u, v, c_nums, share_cost);
+				mem_network->insert(v, u, c_nums, share_cost);
+			}  // sharing structure
+
+			spare_c.push_back(v);
+			mem_network->insert(st, v, c + cs <= cols ? cs : cols - c);
+		}
+
+		int i, j;
+		for (r = 0, i = 0; r < rows; r += rs, ++i) {
+			for (c = 0, j = 0; c < cols; c += cs, ++j) {
+				auto block = new BipartiteGraph();
+				bi_block.push_back(block);
+
+				auto v = mem_network->new_vertex();
+				v_block_x.push_back(v);
+				mem_network->insert(spare_r[i], v, r_nums);
+				mem_network->insert(v, ed);
+
+				v = mem_network->new_vertex();
+				v_block_y.push_back(v);
+				mem_network->insert(spare_c[j], v, c_nums);
+				mem_network->insert(v, ed);
+
+				
+				int mi = r + rs <= rows ? rs : rows - r;
+				int mj = c + cs <=  cols ? cs : cols - c;
+				for (int i = 0; i < mi; ++i) {
+					auto v = block->new_vertex_x();
+					block->insert(block->st, v, 1);
+				}  // for rows X i
+
+				for (int j = 0; j < mj; ++j) {
+					auto v = block->new_vertex_y();
+					block->insert(v, block->ed, 1);
+				}  // for cols Y j
+			}
+		}  // build block grid
+	}
+
+	tuple<int, int, int> 
+		MemRepairBaseline::gloabl_to_local(int gi, int gj) {
+
+		int li = gi % rs;
+		int lj = gj % cs;
+
+		int b_id = (gi / rs) * r_segs + gj / rs;
+		return std::make_tuple(b_id, li, lj);
+	}
+
+	int MemRepairBaseline::falty_cell_num() {
+		return failure_map.size();
 	}
 
 	void MemRepairBaseline::increment_mcnts(const vector<pair<int, int>>& mcnts) {
+		for (auto && pos : mcnts) {
+			auto it = failure_map.find(pos);
+			if (it == failure_map.end()) {
+				failure_map.insert(pos);
+
+				auto local = gloabl_to_local(pos.first, pos.second);
+				int b_id = std::get<0>(local);
+				int i = std::get<1>(local), j = std::get<2>(local);
+
+				auto block = bi_block[b_id];
+				block->insert(block->ver_x[i], block->ver_y[j], INF_CAP);
+			}
+		}
+	}
+
+	void MemRepairBaseline::repair() {
 
 	}
 

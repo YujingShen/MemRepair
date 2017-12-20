@@ -10,6 +10,9 @@ namespace sjtu {
 	using std::pair;
 	using std::vector;
 
+	class Graph;
+	class FlowGraph;
+	class BipartiteGraph;
 
 	class Graph
 	{
