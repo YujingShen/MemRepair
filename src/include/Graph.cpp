@@ -148,7 +148,7 @@ namespace sjtu {
 		return FlowGraph::insert(u, v, c, w);
 	}
 
-	pair<int, int> BipartiteGraph::min_weighted_cover() {
+	pair<int, int> BipartiteGraph::inc_min_weighted_cover() {
 		auto flow = max_flow_min_cost().first;
 		
 		vector<bool> vis(vertices.size(), false);
@@ -158,8 +158,9 @@ namespace sjtu {
 		vis[st->id] = true;
 		while (!que.empty()) {
 			auto u = que.front();
+
 			que.pop();
-			for (auto &&e = u->first; e != NULL; e = e->next) {
+			for (auto e = u->first; e != NULL; e = e->next) {
 				if (e->c > 0 && !vis[e->v->id]) {
 					vis[e->v->id] = true;
 					que.push(e->v);

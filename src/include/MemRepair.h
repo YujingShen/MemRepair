@@ -22,6 +22,7 @@ namespace sjtu {
 	using std::fstream;
 	using std::tuple;
 	using std::set;
+	using std::map;
 
 	class MemRepair
 	{
@@ -83,7 +84,6 @@ namespace sjtu {
 		int INF_CAP;
 
 		vector<Graph::Vertex> v_block_x, v_block_y;  // vertex in mem net w.r.t. bi block
-		vector<int> prev_x, prev_y;
 	protected:
 		set<pair<int, int>> failure_map;
 		int current_flow;

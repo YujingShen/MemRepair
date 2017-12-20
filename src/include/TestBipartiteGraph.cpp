@@ -19,6 +19,8 @@ int main(int narg, char *args[]) {
 
 	auto r = block->min_weighted_cover();
 	assert(r.first == 0 && r.second == 1);
+	r = block->min_weighted_cover();
+	assert(r.first == 0 && r.second == 0);
 
 	return 0;
 }

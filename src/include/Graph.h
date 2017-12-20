@@ -6,12 +6,15 @@
 #include <queue>
 #include <set>
 #include <cassert>
+#include <iostream>
 
 namespace sjtu {
 	using std::queue;
 	using std::pair;
 	using std::vector;
 	using std::set;
+	using std::cout;
+	using std::endl;
 
 	class Graph;
 	class FlowGraph;
@@ -80,11 +83,9 @@ namespace sjtu {
 		virtual Vertex new_vertex_x(Edge first = NULL);
 		virtual Vertex new_vertex_y(Edge first = NULL);
 		virtual Edge insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
-		virtual pair<int, int> min_weighted_cover();
+		virtual pair<int, int> inc_min_weighted_cover();  // incrementally solve
 	public:
 		vector<Vertex> ver_x, ver_y;
-	protected:
-		int prev_x, prev_y;
 	};
 }
 

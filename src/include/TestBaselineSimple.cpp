@@ -31,7 +31,7 @@ void create_file() {
 int main(int narg, char *args[]) {
 	create_file();
 
-	sjtu::MemRepair mem;
+	sjtu::MemRepairBaseline mem;
 	mem.read_setting("setting_file.txt");
 	mem.read_mcnts("mcnt_file_1.txt");
 

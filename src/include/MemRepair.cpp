@@ -110,14 +110,11 @@ namespace sjtu {
 				v_block_x.push_back(v);
 				mem_network->insert(spare_r[i], v, r_nums);
 				mem_network->insert(v, ed);
-				prev_x.push_back(0);
 
 				v = mem_network->new_vertex();
 				v_block_y.push_back(v);
 				mem_network->insert(spare_c[j], v, c_nums);
 				mem_network->insert(v, ed);
-				prev_y.push_back(0);
-
 				
 				int mi = r + rs <= rows ? rs : rows - r;
 				int mj = c + cs <=  cols ? cs : cols - c;
@@ -166,14 +163,15 @@ namespace sjtu {
 
 	bool MemRepairBaseline::repair() {
 		
+		int inc_req = 0;
 		for (size_t i = 0; i < bi_block.size(); ++i) {
-			auto cover = bi_block[i]->min_weighted_cover();
-
+			auto cover = bi_block[i]->inc_min_weighted_cover();
+			
 			auto u = v_block_x[i];
 			for (auto&& e = u->first; e != NULL; e = e->next) {
 				if (e->v == mem_network->ed) {
-					e->c = prev_x[i] - cover.first;
-					prev_x[i] = cover.first;
+					e->c = cover.first;
+					inc_req += e->c;
 					break;
 				}
 			}
@@ -181,22 +179,34 @@ namespace sjtu {
 			u = v_block_y[i];
 			for (auto&& e = u->first; e != NULL; e = e->next) {
 				if (e->v == mem_network->ed) {
-					e->c = prev_y[i] - cover.second;
-					prev_y[i] = cover.second;
+					e->c = cover.second;
+					inc_req += e->c;
 					break;
 				}
 			}
+
+			cout << cover.first << " " << cover.second << endl;
 		}  // check all blocks and update residule graph
 
 
 		auto flow_cost = mem_network->max_flow_min_cost();
 		current_flow += flow_cost.first;
-		if (current_flow < total_failures()) {
+		if (flow_cost.first < inc_req) {
 			return false;
 		}
 		return true;
 	}
 
 	void MemRepairBaseline::report_allocation() {
+		map<Graph::Vertex, int> resource_alloc;
+
+		for (auto e = mem_network->st->first; e != NULL; e = e->next) {
+			resource_alloc[e->v] = mem_network->edges[e->id ^ 1]->c;
+		}
+
+
+		for (auto && v : spare_r) {
+
+		}
 	}
 }
