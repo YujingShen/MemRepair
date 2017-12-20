@@ -145,12 +145,35 @@ namespace sjtu {
 	}
 
 	Edge BipartiteGraph::insert(Vertex u, Vertex v, int c, float w) {
-		auto e = FlowGraph::insert(u, v, c, w);
-		if (u == st) {
-			edges_s.push_back(e);
-		} else if(v == ed) {
-			edges_t.push_back(e);
+		return FlowGraph::insert(u, v, c, w);
+	}
+
+	pair<int, int> BipartiteGraph::min_weighted_cover() {
+		auto flow = max_flow_min_cost().first;
+		
+		vector<bool> vis(vertices.size(), false);
+		queue<Vertex> que;
+
+		que.push(st);
+		vis[st->id] = true;
+		while (!que.empty()) {
+			auto u = que.front();
+			que.pop();
+			for (auto &&e = u->first; e != NULL; e = e->next) {
+				if (e->c > 0 && !vis[e->v->id]) {
+					vis[e->v->id] = true;
+					que.push(e->v);
+				}
+			}
 		}
-		return e;
+		
+		int count_x = 0;
+		for (auto &&v : ver_x) {
+			if (!vis[v->id]) {
+				++count_x;
+			}
+		}
+		
+		return std::make_pair(count_x, flow - count_x);
 	}
 }

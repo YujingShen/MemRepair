@@ -10,6 +10,7 @@ SET(TEST_SRCS
 	TestMaxFlowMinCost.cpp 
 	TestBipartiteGraph.cpp
 	TestGraphBuild.cpp
+	TestBaselineSimple.cpp
 )
 
 

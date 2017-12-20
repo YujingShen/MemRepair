@@ -34,7 +34,7 @@ namespace sjtu {
 
 		virtual void build_flow_graph();
 
-		virtual void repair();
+		virtual bool repair();
 
 		virtual void report_allocation();
 
@@ -61,14 +61,14 @@ namespace sjtu {
 
 		virtual void build_flow_graph();
 
-		virtual void repair();
+		virtual bool repair();
 
 		virtual void report_allocation();
 
 		// global i, j -> block_id, local i, j
 		tuple<int, int, int> gloabl_to_local(int gi, int gj);
 
-		int falty_cell_num();
+		int total_failures();
 	public:
 		MemRepairBaseline();
 		virtual ~MemRepairBaseline();
@@ -83,8 +83,9 @@ namespace sjtu {
 		int INF_CAP;
 
 		vector<Graph::Vertex> v_block_x, v_block_y;  // vertex in mem net w.r.t. bi block
-
+		vector<int> prev_x, prev_y;
 	protected:
 		set<pair<int, int>> failure_map;
+		int current_flow;
 	};
 }

@@ -4,11 +4,14 @@
 #include <utility>
 #include <cstddef>  // NULL
 #include <queue>
+#include <set>
+#include <cassert>
 
 namespace sjtu {
 	using std::queue;
 	using std::pair;
 	using std::vector;
+	using std::set;
 
 	class Graph;
 	class FlowGraph;
@@ -77,10 +80,11 @@ namespace sjtu {
 		virtual Vertex new_vertex_x(Edge first = NULL);
 		virtual Vertex new_vertex_y(Edge first = NULL);
 		virtual Edge insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
-
+		virtual pair<int, int> min_weighted_cover();
 	public:
 		vector<Vertex> ver_x, ver_y;
-		vector<Edge> edges_s, edges_t;
+	protected:
+		int prev_x, prev_y;
 	};
 }
 
