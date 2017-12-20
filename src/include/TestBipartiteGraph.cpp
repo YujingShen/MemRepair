@@ -17,9 +17,9 @@ int main(int narg, char *args[]) {
 	block->insert(u1, v, 10);
 	block->insert(u2, v, 10);
 
-	auto r = block->min_weighted_cover();
+	auto r = block->inc_min_weighted_cover();
 	assert(r.first == 0 && r.second == 1);
-	r = block->min_weighted_cover();
+	r = block->inc_min_weighted_cover();
 	assert(r.first == 0 && r.second == 0);
 
 	return 0;
