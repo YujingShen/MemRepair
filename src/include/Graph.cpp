@@ -30,11 +30,12 @@ namespace sjtu {
 		return ver;
 	}
 
-	void Graph::insert(Vertex u, Vertex v, int c, float w) {
+	Edge Graph::insert(Vertex u, Vertex v, int c, float w) {
 		auto e = new_edge(u, v, c, w);
 		
 		e->next = u->first;
-		u->first = e;		
+		u->first = e;
+		return e;
 	}
 
 	Graph::~Graph() {
@@ -52,9 +53,10 @@ namespace sjtu {
 		ed = new_vertex();
 	}
 
-	void FlowGraph::insert(Vertex u, Vertex v, int c, float w) {
-		Graph::insert(u, v, c, w);
+	Edge FlowGraph::insert(Vertex u, Vertex v, int c, float w) {
+		auto e = Graph::insert(u, v, c, w);
 		Graph::insert(v, u, 0, -w);
+		return e;
 	}
 
 	pair<int, float> FlowGraph::max_flow_min_cost() {
@@ -140,5 +142,15 @@ namespace sjtu {
 		auto ver = new_vertex(first);
 		ver_y.push_back(ver);
 		return ver;
+	}
+
+	Edge BipartiteGraph::insert(Vertex u, Vertex v, int c, float w) {
+		auto e = FlowGraph::insert(u, v, c, w);
+		if (u == st) {
+			edges_s.push_back(e);
+		} else if(v == ed) {
+			edges_t.push_back(e);
+		}
+		return e;
 	}
 }

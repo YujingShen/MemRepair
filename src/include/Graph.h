@@ -44,7 +44,7 @@ namespace sjtu {
 		virtual Edge new_edge(Vertex u = NULL, Vertex v = NULL, int c = 0, float w = 0.0f);
 		
 		// insert an edge with capacity c weight w
-		virtual void insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
+		virtual Edge insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
 
 		vector<Vertex> vertices;
 		vector<Edge> edges;
@@ -58,7 +58,7 @@ namespace sjtu {
 	public:
 		pair<int, float> max_flow_min_cost();
 		
-		virtual void insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
+		virtual Edge insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
 	public:
 		FlowGraph();
 		virtual ~FlowGraph() = default;
@@ -72,9 +72,11 @@ namespace sjtu {
 	public:
 		virtual Vertex new_vertex_x(Edge first = NULL);
 		virtual Vertex new_vertex_y(Edge first = NULL);
+		virtual Edge insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
 
 	public:
 		vector<Vertex> ver_x, ver_y;
+		vector<Edge> edges_s, edges_t;
 	};
 }
 
