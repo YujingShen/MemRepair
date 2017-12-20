@@ -128,4 +128,17 @@ namespace sjtu {
 		inc_cost = dist[ed->id];
 		return true;
 	}
+
+
+	Vertex BipartiteGraph::new_vertex_x(Edge first) {
+		auto ver = new_vertex(first);
+		ver_x.push_back(ver);
+		return ver;
+	}
+
+	Vertex BipartiteGraph::new_vertex_y(Edge first) {
+		auto ver = new_vertex(first);
+		ver_y.push_back(ver);
+		return ver;
+	}
 }

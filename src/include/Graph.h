@@ -38,19 +38,19 @@ namespace sjtu {
 		virtual ~Graph();
 
 		// creat new vertex
-		Vertex new_vertex(Edge first = NULL);
+		virtual Vertex new_vertex(Edge first = NULL);
 
 		// add new edge
-		Edge new_edge(Vertex u = NULL, Vertex v = NULL, int c = 0, float w = 0.0f);
+		virtual Edge new_edge(Vertex u = NULL, Vertex v = NULL, int c = 0, float w = 0.0f);
 		
 		// insert an edge with capacity c weight w
-		void insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
+		virtual void insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
 
 		vector<Vertex> vertices;
 		vector<Edge> edges;
 	};
 
-	class FlowGraph: public Graph
+	class FlowGraph : public Graph
 	{
 		const float INF;
 		bool spfa(float &inc_cost, vector<Edge>& prev, vector<bool>& in_que, vector<float>& dist);
@@ -58,13 +58,23 @@ namespace sjtu {
 	public:
 		pair<int, float> max_flow_min_cost();
 		
-		void insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
+		virtual void insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
 	public:
 		FlowGraph();
 		virtual ~FlowGraph() = default;
 		
 	public:
 		Vertex st, ed;
+	};
+
+	class BipartiteGraph : public FlowGraph
+	{
+	public:
+		virtual Vertex new_vertex_x(Edge first = NULL);
+		virtual Vertex new_vertex_y(Edge first = NULL);
+
+	public:
+		vector<Vertex> ver_x, ver_y;
 	};
 }
 
