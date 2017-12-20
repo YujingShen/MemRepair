@@ -22,6 +22,7 @@ namespace sjtu {
 
 		struct _Vertex {
 			int id;
+			int d;  // degree
 			Edge first;
 		};
 
@@ -43,7 +44,7 @@ namespace sjtu {
 		// add new edge
 		virtual Edge new_edge(Vertex u = NULL, Vertex v = NULL, int c = 0, float w = 0.0f);
 		
-		// insert an edge with capacity c weight w
+		// insert an edge<u, v> with capacity c weight w
 		virtual Edge insert(Vertex u, Vertex v, int c = 0, float w = 0.0f);
 
 		vector<Vertex> vertices;

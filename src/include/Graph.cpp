@@ -34,7 +34,7 @@ namespace sjtu {
 		auto e = new_edge(u, v, c, w);
 		
 		e->next = u->first;
-		u->first = e;
+		u->first = e, ++u->d;
 		return e;
 	}
 
