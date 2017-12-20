@@ -22,7 +22,7 @@ void create_file() {
 }
 
 int main() {
-	sjtu::MemRepair mem;
+	sjtu::MemRepairBaseline mem;
 	
 	create_file();
 
