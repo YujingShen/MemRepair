@@ -184,8 +184,6 @@ namespace sjtu {
 					break;
 				}
 			}
-
-			cout << cover.first << " " << cover.second << endl;
 		}  // check all blocks and update residule graph
 
 
@@ -204,9 +202,19 @@ namespace sjtu {
 			resource_alloc[e->v] = mem_network->edges[e->id ^ 1]->c;
 		}
 
+		cout 
+			<< "<<<<<<<<<<<<<<<<<<"
+			<< "Report Sparing bit line usage"
+			<< ">>>>>>>>>>>>>>>>>>" << endl;
 
+		cout << "Sparing row bit lines: " << endl;
 		for (auto && v : spare_r) {
+			cout << resource_alloc[v] << " ";
+		} cout << endl;
 
-		}
+		cout << "Sparing column bit lines: " << endl;
+		for (auto && v : spare_c) {
+			cout << resource_alloc[v] << " ";
+		} cout << endl;
 	}
 }
