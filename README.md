@@ -1,8 +1,9 @@
 # Memory Repair
 
+This program utilizes max flow min cost and minimum weighted vertex cover algorithm to tackle the m-CNT fixing problem.
+
 * Platform: Linux
 * Prerequisite: cmake >= 3.0
-
 
 ## Compile
 
