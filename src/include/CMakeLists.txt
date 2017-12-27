@@ -11,6 +11,7 @@ SET(TEST_SRCS
 	TestBipartiteGraph.cpp
 	TestGraphBuild.cpp
 	TestBaselineSimple.cpp
+	TestFaultGen.cpp
 )
 
 

@@ -1,5 +1,6 @@
 #include "FaultGen.h"
 #include <cassert>
+#include <iostream>
 
 namespace sjtu {
 
@@ -12,18 +13,26 @@ namespace sjtu {
 		string distr_raw;
 		for (int i = 0; i < 6; ++i) {
 			distr_file >> distr_raw;
-			stringstream distr_str(distr_raw, std::ios::in);
 
-			int num;
-			size_t j = 0;
-			while (distr_str >> num) {
-				if (candidate.size() <= ++j) {
-					candidate.push_back({0, 0, 0, 0, 0, 0});
-				}
-				candidate[j - 1][i] = num;
-			}
-		}
+			int j = 0;
+			for (size_t k = 0; k < distr_raw.size(); ++k) {
+				if (distr_raw[k] >= '0' && distr_raw[k] <= '9') {
+					int num = distr_raw[k] - '0';
+					while (
+						k + 1 < distr_raw.size()
+						&& distr_raw[k + 1] >= '0'
+						&& distr_raw[k + 1] <= '9') {
+	
+						num = num * 10 + (distr_raw[++k] - '0');
+					}
 
+					if (candidate.size() < ++j) {
+						candidate.push_back({ 0, 0, 0, 0, 0, 0 });
+					}
+					candidate[j - 1][i] = num;
+				}  // get num			
+			}  // scan for num
+		}  // for 6 cases
 		candi_itr = candidate.begin();
 	}
 
