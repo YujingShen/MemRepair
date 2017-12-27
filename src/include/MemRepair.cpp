@@ -57,14 +57,32 @@ namespace sjtu {
 	}
 
 	MemRepairBaseline::~MemRepairBaseline() {
+		clear();
+	}
+
+	void MemRepairBaseline::clear() {
 		delete mem_network;
-		
+		mem_network = NULL;
+
 		for (auto&& b : bi_block) {
 			delete b;
 		}
+		
 		bi_block.clear();
+		spare_r.clear();
+		spare_c.clear();
+		v_block_x.clear();
+		v_block_y.clear();
+		failure_map.clear();
+
+		rs = cs = current_flow = INF_CAP = 0;
 	}
 
+	void MemRepairBaseline::rebuild_flow_graph() {
+		clear();
+		mem_network = new FlowGraph();
+		build_flow_graph();
+	}
 	
 	void MemRepairBaseline::build_flow_graph() {
 		

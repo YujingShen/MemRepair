@@ -1,12 +1,12 @@
 SET(FOLDER_NAME "include")
 
-SET(LIB_FILES Graph.cpp MemRepair.cpp)
+SET(LIB_FILES Graph.cpp MemRepair.cpp FaultGen.cpp)
 
 ADD_LIBRARY(MemRepair SHARED ${LIB_FILES})
 
 SET(TEST_SRCS     
 	TestIO.cpp 
-	TestFlowInsert.cpp 
+	TestFlowInsert.cpp
 	TestMaxFlowMinCost.cpp 
 	TestBipartiteGraph.cpp
 	TestGraphBuild.cpp

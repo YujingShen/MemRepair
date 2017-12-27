@@ -11,6 +11,7 @@
 #include <cstddef>  // NULL
 
 #include "Graph.h"
+#include "FaultGen.h"
 
 
 namespace sjtu {
@@ -55,12 +56,13 @@ namespace sjtu {
 
 	class MemRepairBaseline: public MemRepair
 	{
-		//using std::map;
-		//using std::pair;
+
 	public:
 		virtual void increment_mcnts(const vector<pair<int, int>>& mcnts);
 
 		virtual void build_flow_graph();
+
+		virtual void rebuild_flow_graph();
 
 		virtual bool repair();
 
@@ -77,6 +79,7 @@ namespace sjtu {
 	protected:
 		FlowGraph* mem_network;
 		vector<BipartiteGraph*> bi_block;
+		void clear();
 
 	protected:
 		vector<Graph::Vertex> spare_r, spare_c;
