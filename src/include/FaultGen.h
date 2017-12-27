@@ -29,7 +29,7 @@ namespace sjtu {
 		vector<pair<int, int>> 
 			gen_fault_from_distr(const vector<int>& distr, int row, int col);
 
-
+		size_t size();
 	private:
 		vector<vector<int>> candidate;
 		vector<vector<int>>::iterator candi_itr;

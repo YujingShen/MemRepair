@@ -47,6 +47,10 @@ namespace sjtu {
 		MemRepair() = default;
 		virtual ~MemRepair() = default;
 
+	public:
+		int col_num();
+		int row_num();
+
 	protected:
 		int cols, rows;
 		int col_segs, r_segs;  // segment numbers

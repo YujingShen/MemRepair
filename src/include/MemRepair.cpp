@@ -50,6 +50,12 @@ namespace sjtu {
 		cout << "WARNING: not implemented yet" << endl;
 	}
 
+	int MemRepair::col_num() {
+		return cols;
+	}
+	int MemRepair::row_num() {
+		return rows;
+	}
 
 
 	MemRepairBaseline::MemRepairBaseline() {

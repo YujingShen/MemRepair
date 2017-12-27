@@ -107,4 +107,8 @@ namespace sjtu {
 		return fault;
 	}
 
+
+	size_t CNFET_faultgen::size() {
+		return candidate.size();
+	}
 }
