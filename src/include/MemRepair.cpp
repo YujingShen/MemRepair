@@ -11,7 +11,7 @@ namespace sjtu {
 			>> col_segs >> r_segs
 			>> c_nums >> r_nums
 			>> share_cost;
-		assert(col_segs < cols && r_segs < rows);
+		assert(col_segs <= cols && r_segs <= rows);
 
 		setting_file.close();
 		build_flow_graph();
