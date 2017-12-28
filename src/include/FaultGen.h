@@ -14,12 +14,12 @@ namespace sjtu {
 	using std::fstream;
 	using std::stringstream;
 
-	class CNFET_faultgen
+	class MESP_faultgen
 	{
 		
 	public:
-		CNFET_faultgen() = default;
-		virtual ~CNFET_faultgen() = default;
+		MESP_faultgen() = default;
+		virtual ~MESP_faultgen() = default;
 
 		void load_distr(const string& distr_file_path);
 

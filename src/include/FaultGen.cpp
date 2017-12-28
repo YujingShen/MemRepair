@@ -5,7 +5,7 @@
 namespace sjtu {
 
 
-	void CNFET_faultgen::load_distr(const string& distr_file_path) {
+	void MESP_faultgen::load_distr(const string& distr_file_path) {
 		
 		fstream distr_file(distr_file_path, std::ios::in);
 		assert(distr_file);
@@ -36,14 +36,14 @@ namespace sjtu {
 		candi_itr = candidate.begin();
 	}
 
-	vector<int> CNFET_faultgen::next_distr() {
+	vector<int> MESP_faultgen::next_distr() {
 		if (candi_itr == candidate.end()) {
 			candi_itr = candidate.begin();
 		}
 		return *(candi_itr++);
 	}
 
-	vector<pair<int, int>> CNFET_faultgen::gen_fault_from_distr(
+	vector<pair<int, int>> MESP_faultgen::gen_fault_from_distr(
 		const vector<int>& distr, int row, int col) {
 
 		vector<pair<int, int>> fault;
@@ -108,7 +108,7 @@ namespace sjtu {
 	}
 
 
-	size_t CNFET_faultgen::size() {
+	size_t MESP_faultgen::size() {
 		return candidate.size();
 	}
 }

@@ -13,10 +13,14 @@ int main(int narg, char *args[]) {
 	}
 
 	sjtu::MemRepairBaseline mem;
-	sjtu::CNFET_faultgen fault_gen;
+	sjtu::MESP_faultgen fault_gen;
 
 	mem.read_setting(args[1]);
 	fault_gen.load_distr(args[2]);
+
+	std::cout
+		<< "setting done run benchmark"
+		<< std::endl;
 
 	int success_num = 0;
 	for (size_t i = 0; i < fault_gen.size(); ++i) {
@@ -32,9 +36,11 @@ int main(int narg, char *args[]) {
 		}
 	}
 
-	float ratio = (float)success_num / (float)fault_gen.size();
+	float ratio = 100.0f * (float)success_num / (float)fault_gen.size();
 
-	std::cout << "ratio: " << ratio << std::endl;
+	std::cout
+		<< "ratio: " << ratio 
+		<< " %" << std::endl;
 
 	return 0;
 }

@@ -3,9 +3,9 @@
 #include <iostream>
 
 int main(int narg, char *args[]) {
-	auto cnfet_gen = sjtu::CNFET_faultgen();
+	auto cnfet_gen = sjtu::MESP_faultgen();
 
-	cnfet_gen.load_distr("../../../test/faultNum.txt");
+	cnfet_gen.load_distr("../../../test/fault_distr.txt");
 	
 	
 	for (int i = 0; i < 1001; ++i) {
