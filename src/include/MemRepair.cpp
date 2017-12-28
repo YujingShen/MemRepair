@@ -132,12 +132,12 @@ namespace sjtu {
 
 				auto v = mem_network->new_vertex();
 				v_block_x.push_back(v);
-				mem_network->insert(spare_r[i], v, r_nums);
+				mem_network->insert(spare_r[i], v, 3 * r_nums + 1);  // INF capacity
 				mem_network->insert(v, ed);
 
 				v = mem_network->new_vertex();
 				v_block_y.push_back(v);
-				mem_network->insert(spare_c[j], v, c_nums);
+				mem_network->insert(spare_c[j], v, 3 * c_nums + 1);
 				mem_network->insert(v, ed);
 				
 				int mi = r + rs <= rows ? rs : rows - r;
