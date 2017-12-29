@@ -24,16 +24,19 @@ int main(int narg, char *args[]) {
 
 	int success_num = 0;
 	for (size_t i = 0; i < fault_gen.size(); ++i) {
-		mem.rebuild_flow_graph();
+		
 		auto distr = fault_gen.next_distr();
 		mem.increment_mcnts(
 			fault_gen.gen_fault_from_distr(
 				distr, mem.row_num(), mem.col_num()
 			)
 		);
+
 		if (mem.repair()) {
 			++success_num;
 		}
+
+		mem.rebuild_flow_graph();
 	}
 
 	float ratio = 100.0f * (float)success_num / (float)fault_gen.size();
