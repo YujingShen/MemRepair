@@ -1,4 +1,5 @@
 #include "MemRepair.h"
+//#define DEBUG
 
 namespace sjtu {
 
@@ -8,10 +9,10 @@ namespace sjtu {
 		assert(setting_file);
 		setting_file
 			>> cols >> rows
-			>> col_segs >> r_segs
+			>> c_segs >> r_segs
 			>> c_nums >> r_nums
 			>> share_cost;
-		assert(col_segs <= cols && r_segs <= rows);
+		assert(c_segs <= cols && r_segs <= rows);
 
 		setting_file.close();
 		build_flow_graph();
@@ -92,62 +93,62 @@ namespace sjtu {
 	
 	void MemRepairBaseline::build_flow_graph() {
 		
-		rs = rows / r_segs + (rows % r_segs == 0 ? 0 : 1);
-		cs = cols / col_segs + (cols % col_segs == 0 ? 0 : 1);
-		INF_CAP = rs * cs;
+		rs = rows / r_segs;
+		cs = cols / c_segs;
+		INF_CAP = rs * cs * 4;
 
 		auto st = mem_network->st;
 		auto ed = mem_network->ed;
 
 		int r, c;
-		for (r = 0; r < rows; r += rs) {
+
+		for (r = 0; r < r_segs; ++r) {
 			auto v = mem_network->new_vertex();
 			if (!spare_r.empty()) {
 				auto u = spare_r.back();
 				mem_network->insert(u, v, r_nums, share_cost);
 				mem_network->insert(v, u, r_nums, share_cost);
-			}  // sharing structure
-			
+			}
 			spare_r.push_back(v);
-			mem_network->insert(st, v, r + rs <= rows ? rs : rows - r);
+			mem_network->insert(st, v, r_nums);
 		}
 
-		for (c = 0; c < cols; c += cs) {
+		for (c = 0; c < c_segs; ++c) {
 			auto v = mem_network->new_vertex();
 			if (!spare_c.empty()) {
-				auto u = spare_r.back();
+				auto u = spare_c.back();
 				mem_network->insert(u, v, c_nums, share_cost);
 				mem_network->insert(v, u, c_nums, share_cost);
 			}  // sharing structure
 
 			spare_c.push_back(v);
-			mem_network->insert(st, v, c + cs <= cols ? cs : cols - c);
+			mem_network->insert(st, v, c_nums);
 		}
 
-		int i, j;
-		for (r = 0, i = 0; r < rows; r += rs, ++i) {
-			for (c = 0, j = 0; c < cols; c += cs, ++j) {
+		for (r = 0; r < r_segs; ++r) {
+			for (c = 0; c < c_segs; ++c) {
 				auto block = new BipartiteGraph();
 				bi_block.push_back(block);
 
 				auto v = mem_network->new_vertex();
 				v_block_x.push_back(v);
-				mem_network->insert(spare_r[i], v, 3 * r_nums + 1);  // INF capacity
-				mem_network->insert(v, ed);
+				mem_network->insert(spare_c[c], v, INF_CAP);  // INF capacity
+				mem_network->insert(v, ed); 
 
 				v = mem_network->new_vertex();
 				v_block_y.push_back(v);
-				mem_network->insert(spare_c[j], v, 3 * c_nums + 1);
+				mem_network->insert(spare_r[r], v, INF_CAP);
 				mem_network->insert(v, ed);
 				
-				int mi = r + rs <= rows ? rs : rows - r;
-				int mj = c + cs <=  cols ? cs : cols - c;
-				for (int i = 0; i < mi; ++i) {
+				int mi = r == r_segs - 1 ? rs + rows % r_segs : rs;
+				int mj = c == c_segs - 1 ? cs + cols % c_segs : cs;
+
+				for (int k = 0; k < mi; ++k) {
 					auto v = block->new_vertex_x();
 					block->insert(block->st, v, 1);
 				}  // for rows X i
 
-				for (int j = 0; j < mj; ++j) {
+				for (int k = 0; k < mj; ++k) {
 					auto v = block->new_vertex_y();
 					block->insert(v, block->ed, 1);
 				}  // for cols Y j
@@ -158,10 +159,12 @@ namespace sjtu {
 	tuple<int, int, int> 
 		MemRepairBaseline::gloabl_to_local(int gi, int gj) {
 
-		int li = gi % rs;
-		int lj = gj % cs;
+		int r = gi / rs;
+		int c = gj / cs;
+		int li = (gi % rs) + (r == r_segs ? rs : 0);
+		int lj = (gj % cs) + (c == c_segs ? cs : 0);
 
-		int b_id = (gi / rs) * r_segs + gj / rs;
+		int b_id = std::min(r, r_segs - 1) * c_segs + std::min(c, c_segs - 1);
 		return std::make_tuple(b_id, li, lj);
 	}
 
@@ -190,7 +193,7 @@ namespace sjtu {
 		int inc_req = 0;
 		for (size_t i = 0; i < bi_block.size(); ++i) {
 			auto cover = bi_block[i]->inc_min_weighted_cover();
-			
+
 			auto u = v_block_x[i];
 			for (auto&& e = u->first; e != NULL; e = e->next) {
 				if (e->v == mem_network->ed) {
@@ -212,6 +215,7 @@ namespace sjtu {
 
 
 		auto flow_cost = mem_network->max_flow_min_cost();
+
 		current_flow += flow_cost.first;
 		if (flow_cost.first < inc_req) {
 			return false;
@@ -231,14 +235,17 @@ namespace sjtu {
 			<< "Report Sparing bit line usage"
 			<< ">>>>>>>>>>>>>>>>>>" << endl;
 
-		cout << "Sparing row bit lines: " << endl;
+
+		cout << "Sparing Row bit lines: " << endl;
+		for (auto && v : spare_c) {
+			cout << resource_alloc[v] << " ";
+		} cout << endl;
+
+
+		cout << "Sparing Column bit lines: " << endl;
 		for (auto && v : spare_r) {
 			cout << resource_alloc[v] << " ";
 		} cout << endl;
 
-		cout << "Sparing column bit lines: " << endl;
-		for (auto && v : spare_c) {
-			cout << resource_alloc[v] << " ";
-		} cout << endl;
 	}
 }

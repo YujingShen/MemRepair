@@ -53,7 +53,7 @@ namespace sjtu {
 
 	protected:
 		int cols, rows;
-		int col_segs, r_segs;  // segment numbers
+		int c_segs, r_segs;  // segment numbers
 		int c_nums, r_nums;  // sparing bit line number
 		float share_cost;  // cost in sharing between adjacent sparing bits
 	};
@@ -86,7 +86,9 @@ namespace sjtu {
 		void clear();
 
 	protected:
-		vector<Graph::Vertex> spare_r, spare_c;
+		// spare bits along row / columns 
+		// i.e. column / row redundancy
+		vector<Graph::Vertex> spare_r, spare_c;  
 		int rs, cs;
 		int INF_CAP;
 

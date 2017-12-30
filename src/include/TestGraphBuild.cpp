@@ -27,8 +27,8 @@ int main(int narg, char *args[]) {
 	auto r = mem.gloabl_to_local(9, 9);
 
 	assert(get<0>(r) == 8);
-	assert(get<1>(r) == 1);
-	assert(get<2>(r) == 1);
+	assert(get<1>(r) == 3);
+	assert(get<2>(r) == 3);
 
 	r = mem.gloabl_to_local(0, 0);
 	assert(get<0>(r) == 0);
@@ -37,8 +37,8 @@ int main(int narg, char *args[]) {
 
 	r = mem.gloabl_to_local(5, 5);
 	assert(get<0>(r) == 4);
-	assert(get<1>(r) == 1);
-	assert(get<2>(r) == 1);
+	assert(get<1>(r) == 2);
+	assert(get<2>(r) == 2);
 
 
 	return 0;
