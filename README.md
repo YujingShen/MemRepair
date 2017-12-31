@@ -19,11 +19,13 @@ make test
 Setting File:
 
 ```
-row column
-row-segments column-segments
+column row
+row-segments column-segments 
 row-sparing-lines column-sparing-lines
 sharing-cost
 ```
+
+where spare row segments is the segments alone columns and the variable in source code is spare_c.
 
 mCNT File:
 
@@ -31,12 +33,19 @@ mCNT File:
 ri cj  
 ....
 ```
-where ri ranges from 0 to r - 1 and cj from 0 to c - 1
+where ri ranges from 0 to r - 1 and cj from 0 to c - 1. Each line contains exactly one fault.
 
 Baseline Demo:
 
-```cpp
+```sh
 ./MemRepairBaselineDemo setting_file_path mcnt_file_path
 ```
 
 The baseline algorithm utilizes greed strategy in determining weights of vertices in bipartite graph to ensure the minimum weighted vertex cover will yield some solution for each block.
+
+Baseline Benchmark:
+```sh
+./run_benchmark_once benchmark_id
+```
+
+For file benchmark_setting_file_5_1 the benchmark_id equals 5_1.
